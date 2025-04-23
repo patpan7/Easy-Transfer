@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="30dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/btnCreateVoucher"
+        android:text="➕ Δημιουργία Voucher"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         />
+
+    <Button
+        android:id="@+id/btnViewVouchers"
+        android:text="📋 Προβολή Vouchers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         />
+
+    <Button
+        android:id="@+id/btnSettings"
+        android:text="⚙️ Ρυθμίσεις"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
