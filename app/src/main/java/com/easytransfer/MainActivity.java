@@ -2,8 +2,11 @@ package com.easytransfer;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.*;
+
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
@@ -18,6 +21,9 @@ public class MainActivity extends AppCompatActivity {
     TimePicker timePicker;
     Button btnSave, btnSendPdf;
     DatabaseHelper dbHelper;
+    AutoCompleteTextView etPickup;
+    AutoCompleteTextView etDropoff;
+    EditText etNotes;
 
 
     @Override
@@ -31,9 +37,25 @@ public class MainActivity extends AppCompatActivity {
         etAdults = findViewById(R.id.etAdults);
         etChildren = findViewById(R.id.etChildren);
         rgTransferType = findViewById(R.id.rgTransferType);
+        etPickup = findViewById(R.id.etPickup);
+        etDropoff = findViewById(R.id.etDropoff);
         datePicker = findViewById(R.id.datePicker);
         timePicker = findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
+        etNotes = findViewById(R.id.etNotes);
+
+        String[] locations = {"Αεροδρόμιο", "Λιμάνι", "Κέντρο", "Ξενοδοχείο"};
+        //ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, locations);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, locations);
+
+        etPickup.setAdapter(adapter);
+        etDropoff.setAdapter(adapter);
+        etPickup.setOnClickListener(v -> etPickup.showDropDown());
+        etDropoff.setOnClickListener(v -> etDropoff.showDropDown());
+
+        // Προαιρετικό: Ενεργοποίηση άμεσης εμφάνισης dropdown
+        etPickup.setThreshold(1);
+        etDropoff.setThreshold(1);
 
         btnSave = findViewById(R.id.btnSave);
         btnSendPdf = findViewById(R.id.btnSendPdf);
@@ -45,10 +67,13 @@ public class MainActivity extends AppCompatActivity {
     private void saveVoucher() {
             String name = etName.getText().toString().trim();
             String email = etEmail.getText().toString().trim();
-            String adultsStr = etAdults.getText().toString().trim();
-            String childrenStr = etChildren.getText().toString().trim();
+            String adultsStr = (etAdults.getText().toString().trim() != "") ? etAdults.getText().toString().trim() : "0";
+            String childrenStr = (etChildren.getText().toString().trim() != "") ? etChildren.getText().toString().trim() : "0";
+            String pickupLocation = etPickup.getText().toString().trim();
+            String dropoffLocation = etDropoff.getText().toString().trim();
+            String notes = (etNotes.getText().toString().trim() != "") ? etNotes.getText().toString().trim() : "";
 
-            if (name.isEmpty() || email.isEmpty() || adultsStr.isEmpty() || childrenStr.isEmpty()) {
+            if (name.isEmpty() || email.isEmpty() || pickupLocation.isEmpty() || dropoffLocation.isEmpty() || adultsStr.isEmpty() || childrenStr.isEmpty()) {
                 Toast.makeText(this, "Συμπλήρωσε όλα τα πεδία", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -68,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             int minute = timePicker.getMinute();
             String time = hour + ":" + (minute < 10 ? "0" + minute : minute);
 
-            boolean inserted = dbHelper.insertVoucher(name, email, adults, children, transferType, date, time);
+            boolean inserted = dbHelper.insertVoucher(name, email, adults, children, transferType, date, time, pickupLocation, dropoffLocation, notes);
 
             if (inserted) {
                 Toast.makeText(this, "Το voucher αποθηκεύτηκε!", Toast.LENGTH_SHORT).show();
@@ -87,12 +112,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private void sendVoucherAsPdf() {
         String name = etName.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
         int adults = Integer.parseInt(etAdults.getText().toString().trim());
         int children = Integer.parseInt(etChildren.getText().toString().trim());
         String type = (rgTransferType.getCheckedRadioButtonId() == R.id.rbOneWay) ? "One Way" : "Return";
+        String pickupLocation = etPickup.getText().toString().trim();
+        String dropoffLocation = etDropoff.getText().toString().trim();
 
         int day = datePicker.getDayOfMonth();
         int month = datePicker.getMonth() + 1;
@@ -102,8 +130,9 @@ public class MainActivity extends AppCompatActivity {
         int hour = timePicker.getHour();
         int minute = timePicker.getMinute();
         String time = hour + ":" + (minute < 10 ? "0" + minute : minute);
-
-        File pdf = PdfGenerator.generateVoucherPDF(this, name, email, adults, children, type, date, time, dbHelper);
+        String notes = etNotes.getText().toString().trim();
+        Voucher voucher = new Voucher(name, email, type, date, time, adults, children, pickupLocation, dropoffLocation, notes);
+        File pdf = PdfGenerator.generateVoucherPdf(this, voucher);
 
         if (pdf != null) {
             sendEmailWithAttachment(email, pdf);

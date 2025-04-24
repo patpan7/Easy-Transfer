@@ -71,7 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Εισαγωγή voucher
-    public boolean insertVoucher(String name, String email, int adults, int children, String type, String date, String time) {
+    public boolean insertVoucher(String name, String email, int adults, int children, String type, String date, String time, String pickupLocation, String dropoffLocation, String notes) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COL_NAME, name);

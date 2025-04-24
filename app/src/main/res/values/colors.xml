@@ -1,5 +1,104 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
+
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="seed">#326789</color>
+    <color name="colorOnPrimaryContainer">#326789</color>
+    <color name="md_theme_light_primary">#006491</color>
+    <color name="md_theme_light_onPrimary">#FFFFFF</color>
+    <color name="md_theme_light_primaryContainer">#C9E6FF</color>
+    <color name="md_theme_light_onPrimaryContainer">#001E2F</color>
+    <color name="md_theme_light_secondary">#006591</color>
+    <color name="md_theme_light_onSecondary">#FFFFFF</color>
+    <color name="md_theme_light_secondaryContainer">#C9E6FF</color>
+    <color name="md_theme_light_onSecondaryContainer">#001E2F</color>
+    <color name="md_theme_light_tertiary">#AC322A</color>
+    <color name="md_theme_light_onTertiary">#FFFFFF</color>
+    <color name="md_theme_light_tertiaryContainer">#FFDAD5</color>
+    <color name="md_theme_light_onTertiaryContainer">#410001</color>
+    <color name="md_theme_light_error">#BA1A1A</color>
+    <color name="md_theme_light_errorContainer">#FFDAD6</color>
+    <color name="md_theme_light_onError">#FFFFFF</color>
+    <color name="md_theme_light_onErrorContainer">#410002</color>
+    <color name="md_theme_light_background">#FAFCFF</color>
+    <color name="md_theme_light_onBackground">#001F2A</color>
+    <color name="md_theme_light_surface">#FAFCFF</color>
+    <color name="md_theme_light_onSurface">#001F2A</color>
+    <color name="md_theme_light_surfaceVariant">#DDE3EA</color>
+    <color name="md_theme_light_onSurfaceVariant">#41474D</color>
+    <color name="md_theme_light_outline">#71787E</color>
+    <color name="md_theme_light_inverseOnSurface">#E0F4FF</color>
+    <color name="md_theme_light_inverseSurface">#003546</color>
+    <color name="md_theme_light_inversePrimary">#89CEFF</color>
+    <color name="md_theme_light_shadow">#000000</color>
+    <color name="md_theme_light_surfaceTint">#006491</color>
+    <color name="md_theme_light_surfaceTintColor">#006491</color>
+    <color name="md_theme_dark_primary">#89CEFF</color>
+    <color name="md_theme_dark_onPrimary">#00344D</color>
+    <color name="md_theme_dark_primaryContainer">#004C6E</color>
+    <color name="md_theme_dark_onPrimaryContainer">#C9E6FF</color>
+    <color name="md_theme_dark_secondary">#89CEFF</color>
+    <color name="md_theme_dark_onSecondary">#00344D</color>
+    <color name="md_theme_dark_secondaryContainer">#004C6E</color>
+    <color name="md_theme_dark_onSecondaryContainer">#C9E6FF</color>
+    <color name="md_theme_dark_tertiary">#FFB4AA</color>
+    <color name="md_theme_dark_onTertiary">#690004</color>
+    <color name="md_theme_dark_tertiaryContainer">#8B1915</color>
+    <color name="md_theme_dark_onTertiaryContainer">#FFDAD5</color>
+    <color name="md_theme_dark_error">#FFB4AB</color>
+    <color name="md_theme_dark_errorContainer">#93000A</color>
+    <color name="md_theme_dark_onError">#690005</color>
+    <color name="md_theme_dark_onErrorContainer">#FFDAD6</color>
+    <color name="md_theme_dark_background">#001F2A</color>
+    <color name="md_theme_dark_onBackground">#BEE9FF</color>
+    <color name="md_theme_dark_surface">#001F2A</color>
+    <color name="md_theme_dark_onSurface">#BEE9FF</color>
+    <color name="md_theme_dark_surfaceVariant">#41474D</color>
+    <color name="md_theme_dark_onSurfaceVariant">#C1C7CE</color>
+    <color name="md_theme_dark_outline">#8B9198</color>
+    <color name="md_theme_dark_inverseOnSurface">#001F2A</color>
+    <color name="md_theme_dark_inverseSurface">#BEE9FF</color>
+    <color name="md_theme_dark_inversePrimary">#006491</color>
+    <color name="md_theme_dark_shadow">#000000</color>
+    <color name="md_theme_dark_surfaceTint">#89CEFF</color>
+    <color name="md_theme_dark_surfaceTintColor">#89CEFF</color>
+    <color name="md_theme_light_stroke">#4F6B7A</color> <!-- Σκούρο μπλε-γκρι -->
+
+    <!-- Primary Colors -->
+    <color name="primary">#006491</color> <!-- Έντονο μπλε για κύρια χρήση -->
+    <color name="onPrimary">#FFFFFF</color> <!-- Λευκό για κείμενο πάνω σε primary -->
+    <color name="primaryContainer">#C9E6FF</color> <!-- Απαλό μπλε για container -->
+    <color name="onPrimaryContainer">#001E2F</color> <!-- Σκούρο για κείμενο σε primary container -->
+
+    <!-- Secondary Colors -->
+    <color name="secondary">#006591</color> <!-- Σκούρο μπλε για δευτερεύουσες χρήσεις -->
+    <color name="onSecondary">#FFFFFF</color>
+    <color name="secondaryContainer">#C9E6FF</color>
+    <color name="onSecondaryContainer">#001E2F</color>
+
+    <!-- Background & Surface Colors -->
+    <color name="background">#FAFCFF</color> <!-- Απαλό για background -->
+    <color name="onBackground">#001F2A</color> <!-- Σκούρο για κείμενο σε background -->
+    <color name="surface">#FAFCFF</color> <!-- Ισοδύναμο με το background για απλότητα -->
+    <color name="onSurface">#001F2A</color>
+
+    <!-- Outline & Error Colors -->
+    <color name="outline">#71787E</color> <!-- Γκρι για περιγράμματα -->
+    <color name="error">#BA1A1A</color> <!-- Κόκκινο για error states -->
+    <color name="onError">#FFFFFF</color> <!-- Λευκό για κείμενο σε error background -->
+
+    <!-- Dark Theme Variants -->
+    <color name="dark_primary">#89CEFF</color>
+    <color name="dark_onPrimary">#00344D</color>
+    <color name="dark_primaryContainer">#004C6E</color>
+    <color name="dark_onPrimaryContainer">#C9E6FF</color>
+
+    <color name="dark_background">#001F2A</color>
+    <color name="dark_onBackground">#BEE9FF</color>
+    <color name="dark_surface">#001F2A</color>
+    <color name="dark_onSurface">#BEE9FF</color>
+    <color name="dark_outline">#8B9198</color>
+
+    <color name="card_border_light">#001F2A</color>
+    <color name="card_border_dark">#BEE9FF</color>
+
 </resources>

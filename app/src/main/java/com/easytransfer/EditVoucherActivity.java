@@ -1,9 +1,13 @@
 package com.easytransfer;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -12,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
@@ -24,11 +29,16 @@ public class EditVoucherActivity extends AppCompatActivity {
     RadioButton rbOneWay, rbReturn;
     DatePicker datePicker;
     TimePicker timePicker;
+    AutoCompleteTextView etPickup;
+    AutoCompleteTextView etDropoff;
+    EditText etNotes;
     Button btnUpdate, btnResendPdf, btnDelete;
 
     DatabaseHelper dbHelper;
     int voucherId;
 
+    @SuppressLint("MissingInflatedId")
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,11 +51,28 @@ public class EditVoucherActivity extends AppCompatActivity {
         rgTransferType = findViewById(R.id.rgTransferType);
         rbOneWay = findViewById(R.id.rbOneWay);
         rbReturn = findViewById(R.id.rbReturn);
+        etPickup = findViewById(R.id.etPickup);
+        etDropoff = findViewById(R.id.etDropoff);
         datePicker = findViewById(R.id.datePicker);
         timePicker = findViewById(R.id.timePicker);
+        etNotes = findViewById(R.id.etNotes);
+
         btnUpdate = findViewById(R.id.btnUpdate);
         btnResendPdf = findViewById(R.id.btnResendPdf);
         btnDelete = findViewById(R.id.btnDelete);
+
+        String[] locations = {"Αεροδρόμιο", "Λιμάνι", "Κέντρο", "Ξενοδοχείο"};
+        //ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, locations);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, locations);
+
+        etPickup.setAdapter(adapter);
+        etDropoff.setAdapter(adapter);
+        etPickup.setOnClickListener(v -> etPickup.showDropDown());
+        etDropoff.setOnClickListener(v -> etDropoff.showDropDown());
+
+        // Προαιρετικό: Ενεργοποίηση άμεσης εμφάνισης dropdown
+        etPickup.setThreshold(1);
+        etDropoff.setThreshold(1);
 
         timePicker.setIs24HourView(true);
         dbHelper = new DatabaseHelper(this);
@@ -126,12 +153,15 @@ public class EditVoucherActivity extends AppCompatActivity {
         }
     }
 
+
     private void resendVoucher() {
         String name = etName.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
         int adults = Integer.parseInt(etAdults.getText().toString().trim());
         int children = Integer.parseInt(etChildren.getText().toString().trim());
         String type = (rgTransferType.getCheckedRadioButtonId() == R.id.rbOneWay) ? "One Way" : "Return";
+        String pickupLocation = etPickup.getText().toString().trim();
+        String dropoffLocation = etDropoff.getText().toString().trim();
 
         int day = datePicker.getDayOfMonth();
         int month = datePicker.getMonth() + 1;
@@ -141,8 +171,9 @@ public class EditVoucherActivity extends AppCompatActivity {
         int hour = timePicker.getHour();
         int minute = timePicker.getMinute();
         String time = hour + ":" + (minute < 10 ? "0" + minute : minute);
-
-        File pdf = PdfGenerator.generateVoucherPDF(this, name, email, adults, children, type, date, time, dbHelper);
+        String notes = etNotes.getText().toString().trim();
+        Voucher voucher = new Voucher(name, email, type, date, time, adults, children, pickupLocation, dropoffLocation, notes);
+        File pdf = PdfGenerator.generateVoucherPdf(this, voucher);
         if (pdf != null) {
             sendEmailWithAttachment(email, pdf);
         }
