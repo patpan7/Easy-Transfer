@@ -60,7 +60,7 @@ public class VoucherListActivity extends AppCompatActivity {
                 String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
                 String date = cursor.getString(cursor.getColumnIndexOrThrow("date"));
                 String email = cursor.getString(cursor.getColumnIndexOrThrow("email"));
-                voucherList.add(new Voucher(id, name, date, email));
+                voucherList.add(new Voucher(id, name, email, date));
             } while (cursor.moveToNext());
             cursor.close();
         }

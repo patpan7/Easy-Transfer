@@ -1,7 +1,9 @@
 package com.easytransfer;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.*;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     EditText etNotes;
 
 
+    @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         timePicker.setIs24HourView(true);
         etNotes = findViewById(R.id.etNotes);
 
-        String[] locations = {"Αεροδρόμιο", "Λιμάνι", "Κέντρο", "Ξενοδοχείο"};
+        String[] locations = {"Airport", "Port", "City Center", "Hotel"};
         //ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, locations);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, locations);
 
@@ -97,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (inserted) {
                 Toast.makeText(this, "Το voucher αποθηκεύτηκε!", Toast.LENGTH_SHORT).show();
-                clearForm();
+                //clearForm();
             } else {
                 Toast.makeText(this, "Αποτυχία αποθήκευσης", Toast.LENGTH_SHORT).show();
             }
@@ -132,7 +135,8 @@ public class MainActivity extends AppCompatActivity {
         String time = hour + ":" + (minute < 10 ? "0" + minute : minute);
         String notes = etNotes.getText().toString().trim();
         Voucher voucher = new Voucher(name, email, type, date, time, adults, children, pickupLocation, dropoffLocation, notes);
-        File pdf = PdfGenerator.generateVoucherPdf(this, voucher);
+        Cursor settingsCursor = dbHelper.getSettings();
+        File pdf = PdfGenerator.generateVoucherPdf(this, voucher, settingsCursor);
 
         if (pdf != null) {
             sendEmailWithAttachment(email, pdf);

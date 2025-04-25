@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -61,7 +62,7 @@ public class EditVoucherActivity extends AppCompatActivity {
         btnResendPdf = findViewById(R.id.btnResendPdf);
         btnDelete = findViewById(R.id.btnDelete);
 
-        String[] locations = {"Αεροδρόμιο", "Λιμάνι", "Κέντρο", "Ξενοδοχείο"};
+        String[] locations = {"Airport", "Port", "City Center", "Hotel"};
         //ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, locations);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, locations);
 
@@ -115,6 +116,9 @@ public class EditVoucherActivity extends AppCompatActivity {
                 rgTransferType.check(R.id.rbReturn);
             }
 
+            etPickup.setText(cursor.getString(cursor.getColumnIndexOrThrow("pickup")));
+            etDropoff.setText(cursor.getString(cursor.getColumnIndexOrThrow("dropoff")));
+
             String date = cursor.getString(cursor.getColumnIndexOrThrow("date"));
             String[] parts = date.split("/");
             datePicker.updateDate(Integer.parseInt(parts[2]), Integer.parseInt(parts[1]) - 1, Integer.parseInt(parts[0]));
@@ -123,6 +127,8 @@ public class EditVoucherActivity extends AppCompatActivity {
             String[] t = time.split(":");
             timePicker.setHour(Integer.parseInt(t[0]));
             timePicker.setMinute(Integer.parseInt(t[1]));
+
+            etNotes.setText(cursor.getString(cursor.getColumnIndexOrThrow("note")));
 
             cursor.close();
         }
@@ -134,6 +140,8 @@ public class EditVoucherActivity extends AppCompatActivity {
         int adults = Integer.parseInt(etAdults.getText().toString().trim());
         int children = Integer.parseInt(etChildren.getText().toString().trim());
         String transferType = (rgTransferType.getCheckedRadioButtonId() == R.id.rbOneWay) ? "One Way" : "Return";
+        String pickupLocation = etPickup.getText().toString().trim();
+        String dropoffLocation = etDropoff.getText().toString().trim();
 
         int day = datePicker.getDayOfMonth();
         int month = datePicker.getMonth() + 1;
@@ -144,7 +152,9 @@ public class EditVoucherActivity extends AppCompatActivity {
         int minute = timePicker.getMinute();
         String time = hour + ":" + (minute < 10 ? "0" + minute : minute);
 
-        boolean updated = dbHelper.updateVoucher(voucherId, name, email, adults, children, transferType, date, time);
+        String notes = etNotes.getText().toString().trim();
+
+        boolean updated = dbHelper.updateVoucher(voucherId, name, email, adults, children, transferType,pickupLocation,dropoffLocation, date, time, notes);
 
         if (updated) {
             Toast.makeText(this, "Voucher ενημερώθηκε!", Toast.LENGTH_SHORT).show();
@@ -153,7 +163,7 @@ public class EditVoucherActivity extends AppCompatActivity {
         }
     }
 
-
+    @SuppressLint("NewApi")
     private void resendVoucher() {
         String name = etName.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
@@ -172,8 +182,10 @@ public class EditVoucherActivity extends AppCompatActivity {
         int minute = timePicker.getMinute();
         String time = hour + ":" + (minute < 10 ? "0" + minute : minute);
         String notes = etNotes.getText().toString().trim();
+        Log.e("Type", type);
         Voucher voucher = new Voucher(name, email, type, date, time, adults, children, pickupLocation, dropoffLocation, notes);
-        File pdf = PdfGenerator.generateVoucherPdf(this, voucher);
+        Cursor settingsCursor = dbHelper.getSettings();
+        File pdf = PdfGenerator.generateVoucherPdf(this, voucher, settingsCursor);
         if (pdf != null) {
             sendEmailWithAttachment(email, pdf);
         }

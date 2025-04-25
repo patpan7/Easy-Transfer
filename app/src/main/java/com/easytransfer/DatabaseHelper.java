@@ -19,14 +19,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_ADULTS = "adults";
     private static final String COL_CHILDREN = "children";
     private static final String COL_TYPE = "type";
+    private static final String COL_PICKUP = "pickup";
+    private static final String COL_DROPOFF = "dropoff";
     private static final String COL_DATE = "date";
     private static final String COL_TIME = "time";
+    private static final String COL_NOTE = "note";
 
     // Πίνακας Ρυθμίσεων
     private static final String TABLE_SETTINGS = "settings";
+    private static final String COL_COMPANY_TITLE = "company_title";
     private static final String COL_COMPANY_NAME = "company_name";
+    private static final String COL_COMPANY_AFM = "company_afm";
+    private static final String COL_COMPANY_ADDRESS = "company_address";
+    private static final String COL_COMPANY_CITY = "company_city";
+    private static final String COL_COMPANY_POSTCODE = "company_postcode";
     private static final String COL_COMPANY_EMAIL = "company_email";
-    private static final String COL_PHONE = "phone";
+    private static final String COL_PHONE = "company_phone";
+    private static final String COL_COMPANY_MOBILE = "company_mobile";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -42,23 +51,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_ADULTS + " INTEGER, " +
                 COL_CHILDREN + " INTEGER, " +
                 COL_TYPE + " TEXT, " +
+                COL_PICKUP + " TEXT, " +
+                COL_DROPOFF + " TEXT, " +
                 COL_DATE + " TEXT, " +
-                COL_TIME + " TEXT)";
+                COL_TIME + " TEXT, " +
+                COL_NOTE + ")";
         db.execSQL(createVouchersTable);
 
         // Δημιουργία πίνακα settings
         String createSettingsTable = "CREATE TABLE " + TABLE_SETTINGS + " (" +
                 COL_ID + " INTEGER PRIMARY KEY, " +
+                COL_COMPANY_TITLE + " TEXT, " +
                 COL_COMPANY_NAME + " TEXT, " +
+                COL_COMPANY_AFM + " TEXT, " +
+                COL_COMPANY_ADDRESS + " TEXT, " +
+                COL_COMPANY_CITY + " TEXT, " +
+                COL_COMPANY_POSTCODE + " TEXT, " +
                 COL_COMPANY_EMAIL + " TEXT, " +
+                COL_COMPANY_MOBILE + " TEXT, " +
                 COL_PHONE + " TEXT)";
         db.execSQL(createSettingsTable);
 
         // Εισαγωγή αρχικής γραμμής στις ρυθμίσεις (id = 1)
         ContentValues cv = new ContentValues();
         cv.put(COL_ID, 1);
+        cv.put(COL_COMPANY_TITLE, "");
         cv.put(COL_COMPANY_NAME, "");
+        cv.put(COL_COMPANY_AFM, "");
+        cv.put(COL_COMPANY_ADDRESS, "");
+        cv.put(COL_COMPANY_CITY, "");
+        cv.put(COL_COMPANY_POSTCODE, "");
         cv.put(COL_COMPANY_EMAIL, "");
+        cv.put(COL_COMPANY_MOBILE, "");
         cv.put(COL_PHONE, "");
         db.insert(TABLE_SETTINGS, null, cv);
     }
@@ -79,19 +103,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COL_ADULTS, adults);
         cv.put(COL_CHILDREN, children);
         cv.put(COL_TYPE, type);
+        cv.put(COL_PICKUP, pickupLocation);
+        cv.put(COL_DROPOFF, dropoffLocation);
         cv.put(COL_DATE, date);
         cv.put(COL_TIME, time);
+        cv.put(COL_NOTE, notes);
         long result = db.insert(TABLE_VOUCHERS, null, cv);
         return result != -1;
     }
 
     // Αποθήκευση ρυθμίσεων
-    public boolean saveSettings(String companyName, String companyEmail, String phone) {
+    public boolean saveSettings(String companyTitle, String companyName, String companyAfm, String companyAddress, String companyCity, String companyPostcode, String companyEmail, String companyMobile, String companyPhone) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
+        cv.put(COL_COMPANY_TITLE, companyTitle);
         cv.put(COL_COMPANY_NAME, companyName);
+        cv.put(COL_COMPANY_AFM, companyAfm);
+        cv.put(COL_COMPANY_ADDRESS, companyAddress);
+        cv.put(COL_COMPANY_CITY, companyCity);
+        cv.put(COL_COMPANY_POSTCODE, companyPostcode);
         cv.put(COL_COMPANY_EMAIL, companyEmail);
-        cv.put(COL_PHONE, phone);
+        cv.put(COL_COMPANY_MOBILE, companyMobile);
+        cv.put(COL_PHONE, companyPhone);
         int result = db.update(TABLE_SETTINGS, cv, COL_ID + " = ?", new String[]{"1"});
         return result > 0;
     }
@@ -113,16 +146,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean updateVoucher(int id, String name, String email, int adults, int children,
-                                 String transferType, String date, String time) {
+                                 String type, String pickup, String dropoff, String date, String time, String note) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("name", name);
-        values.put("email", email);
-        values.put("adults", adults);
-        values.put("children", children);
-        values.put("transfer_type", transferType);
-        values.put("date", date);
-        values.put("time", time);
+        values.put(COL_NAME, name);
+        values.put(COL_EMAIL, email);
+        values.put(COL_ADULTS, adults);
+        values.put(COL_CHILDREN, children);
+        values.put(COL_TYPE, type);
+        values.put(COL_PICKUP, pickup);
+        values.put(COL_DROPOFF, dropoff);
+        values.put(COL_DATE, date);
+        values.put(COL_TIME, time);
+        values.put(COL_NOTE, note);
 
         int rows = db.update(TABLE_VOUCHERS, values, "id = ?", new String[]{String.valueOf(id)});
         return rows > 0;

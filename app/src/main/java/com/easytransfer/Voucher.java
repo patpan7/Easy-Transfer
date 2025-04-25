@@ -18,7 +18,7 @@ public class Voucher {
                    int adults, int children, String pickupLocation, String dropoffLocation, String notes) {
         this.name = name;
         this.email = email;
-        this.type = type;
+        this.type = transferType;
         this.date = date;
         this.time = time;
         this.adults = adults;
