@@ -2,30 +2,53 @@ package com.easytransfer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.card.MaterialCardView;
+
 public class MainMenuActivity extends AppCompatActivity {
 
-    Button btnCreateVoucher, btnViewVouchers, btnSettings;
+    MaterialCardView cardCreateVoucher , cardViewVouchers , cardSettings ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        btnCreateVoucher = findViewById(R.id.btnCreateVoucher);
-        btnViewVouchers = findViewById(R.id.btnViewVouchers);
-        btnSettings = findViewById(R.id.btnSettings);
+        cardCreateVoucher  = findViewById(R.id.cardCreateVoucher);
+        cardViewVouchers = findViewById(R.id.cardViewVouchers);
+        cardSettings = findViewById(R.id.cardSettings);
 
-        btnCreateVoucher.setOnClickListener(v ->
+        setCardTouchAnimation(cardCreateVoucher);
+        setCardTouchAnimation(cardViewVouchers);
+        setCardTouchAnimation(cardSettings);
+
+        cardCreateVoucher.setOnClickListener(v ->
                 startActivity(new Intent(this, MainActivity.class)));
 
-        btnViewVouchers.setOnClickListener(v ->
+        cardViewVouchers.setOnClickListener(v ->
                 startActivity(new Intent(this, VoucherListActivity.class)));
 
-        btnSettings.setOnClickListener(v ->
+        cardSettings.setOnClickListener(v ->
                 startActivity(new Intent(this, SettingsActivity.class)));
+    }
+
+    private void setCardTouchAnimation(MaterialCardView cardView) {
+        Animation scaleDown = AnimationUtils.loadAnimation(this, R.anim.card_scale_down);
+        Animation scaleUp = AnimationUtils.loadAnimation(this, R.anim.card_scale_up);
+
+        cardView.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                cardView.startAnimation(scaleDown);
+            } else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                cardView.startAnimation(scaleUp);
+            }
+            return false;
+        });
     }
 }

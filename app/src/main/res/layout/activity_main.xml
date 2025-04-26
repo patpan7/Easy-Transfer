@@ -6,27 +6,31 @@
     android:padding="16dp">
 
     <LinearLayout
+        android:id="@+id/linearLayoutMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="16dp">
 
         <!-- Πληροφορίες Πελάτη -->
         <androidx.cardview.widget.CardView
             style="@style/myCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="16dp"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:text="Πληροφορίες Πελάτη"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -35,6 +39,7 @@
                     android:id="@+id/etName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
                     android:hint="Όνομα Πελάτη"
                     android:inputType="textPersonName" />
 
@@ -53,17 +58,19 @@
             style="@style/myCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="16dp"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:text="Επιβάτες"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -71,8 +78,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
                     android:orientation="horizontal">
-
 
                     <EditText
                         android:id="@+id/etAdults"
@@ -82,9 +89,9 @@
                         android:hint="Ενήλικες"
                         android:inputType="number" />
 
-                    <View
+                    <Space
                         android:layout_width="12dp"
-                        android:layout_height="0dp" />
+                        android:layout_height="wrap_content" />
 
                     <EditText
                         android:id="@+id/etChildren"
@@ -97,22 +104,24 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Τύπος Μεταφοράς + Παραλαβή & Παράδοση με dropdown -->
+        <!-- Τύπος Μεταφοράς & Σημεία -->
         <androidx.cardview.widget.CardView
             style="@style/myCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="16dp"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:text="Τύπος Μεταφοράς"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -121,6 +130,8 @@
                     android:id="@+id/rgTransferType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
                     <RadioButton
@@ -138,72 +149,58 @@
                         android:text="Με Επιστροφή" />
                 </RadioGroup>
 
-                <LinearLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
+                    android:layout_marginTop="16dp"
+                    android:hint="Σημείο Παραλαβής">
 
-                    <com.google.android.material.textfield.TextInputLayout
+                    <AutoCompleteTextView
+                        android:id="@+id/etPickup"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Σημείο Παραλαβής">
+                        android:layout_height="40dp"
+                        android:focusableInTouchMode="true"
+                        android:inputType="text"
+                        android:isScrollContainer="true"
+                        android:paddingStart="12dp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                        <AutoCompleteTextView
-                            android:id="@+id/etPickup"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:dropDownHeight="wrap_content"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:inputType="text"
-                            android:overlapAnchor="false"
-                            android:paddingStart="12dp"
-                            android:paddingTop="8dp"
-                            android:paddingBottom="8dp"
-                            android:paddingEnd="12dp" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:hint="Σημείο Παράδοσης">
 
-                    <com.google.android.material.textfield.TextInputLayout
+                    <AutoCompleteTextView
+                        android:id="@+id/etDropoff"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:hint="Σημείο Παράδοσης">
-
-                        <AutoCompleteTextView
-                            android:id="@+id/etDropoff"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:dropDownHeight="wrap_content"
-                            android:inputType="text"
-                            android:overlapAnchor="false"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:paddingStart="12dp"
-                            android:paddingTop="8dp"
-                            android:paddingBottom="8dp"
-                            android:paddingEnd="12dp" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
+                        android:layout_height="40dp"
+                        android:focusableInTouchMode="true"
+                        android:inputType="text"
+                        android:isScrollContainer="true"
+                        android:paddingStart="12dp" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Ημερομηνία & Ώρα -->
+        <!-- Ημερομηνία και Ώρα -->
         <androidx.cardview.widget.CardView
             style="@style/myCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="16dp"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:text="Ημερομηνία"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -211,12 +208,15 @@
                 <DatePicker
                     android:id="@+id/datePicker"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:calendarViewShown="false" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
                     android:text="Ώρα"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -225,6 +225,7 @@
                     android:id="@+id/timePicker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:timePickerMode="spinner" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -234,17 +235,19 @@
             style="@style/myCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="16dp"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:text="Παρατηρήσεις"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -255,20 +258,19 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:gravity="top"
-                    android:hint="Παρατηρήσεις"
+                    android:hint="Γράψε παρατηρήσεις..."
                     android:inputType="textMultiLine"
-                    android:maxLines="5"
-                    android:minLines="3" />
+                    android:maxLines="6"
+                    android:minLines="4" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-
 
         <!-- Κουμπιά -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:text="Αποθήκευση" />
 
         <com.google.android.material.button.MaterialButton

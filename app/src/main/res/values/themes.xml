@@ -56,4 +56,12 @@
         <item name="cardCornerRadius">10dp</item>
         <item name="strokeColor">@color/dark_onBackground</item>
     </style>
+
+    <style name="SectionTitle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingTop">24dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
 </resources>

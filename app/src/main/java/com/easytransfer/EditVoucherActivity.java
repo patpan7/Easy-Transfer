@@ -7,11 +7,14 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TimePicker;
@@ -25,6 +28,7 @@ import java.io.File;
 
 public class EditVoucherActivity extends AppCompatActivity {
 
+    LinearLayout mainLayout;
     EditText etName, etEmail, etAdults, etChildren;
     RadioGroup rgTransferType;
     RadioButton rbOneWay, rbReturn;
@@ -44,6 +48,10 @@ public class EditVoucherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_voucher);
+
+        mainLayout = findViewById(R.id.linearLayoutMain);
+        Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        mainLayout.startAnimation(fadeIn);
 
         etName = findViewById(R.id.etName);
         etEmail = findViewById(R.id.etEmail);
