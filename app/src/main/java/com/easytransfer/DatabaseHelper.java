@@ -24,6 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_DATE = "date";
     private static final String COL_TIME = "time";
     private static final String COL_NOTE = "note";
+    private static final String COL_CREATED_AT = "created_at";
 
     // Πίνακας Ρυθμίσεων
     private static final String TABLE_SETTINGS = "settings";
@@ -55,7 +56,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_DROPOFF + " TEXT, " +
                 COL_DATE + " TEXT, " +
                 COL_TIME + " TEXT, " +
-                COL_NOTE + ")";
+                COL_NOTE + " TEXT, " +
+                COL_CREATED_AT + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
         db.execSQL(createVouchersTable);
 
         // Δημιουργία πίνακα settings

@@ -37,6 +37,7 @@ public class EditVoucherActivity extends AppCompatActivity {
     AutoCompleteTextView etPickup;
     AutoCompleteTextView etDropoff;
     EditText etNotes;
+    String createdAt;
     Button btnUpdate, btnResendPdf, btnDelete;
 
     DatabaseHelper dbHelper;
@@ -75,7 +76,11 @@ public class EditVoucherActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, locations);
 
         etPickup.setAdapter(adapter);
+        etPickup.setLongClickable(false);
+        etPickup.setTextIsSelectable(false);
         etDropoff.setAdapter(adapter);
+        etDropoff.setLongClickable(false);
+        etDropoff.setTextIsSelectable(false);
         etPickup.setOnClickListener(v -> etPickup.showDropDown());
         etDropoff.setOnClickListener(v -> etDropoff.showDropDown());
 
@@ -137,7 +142,7 @@ public class EditVoucherActivity extends AppCompatActivity {
             timePicker.setMinute(Integer.parseInt(t[1]));
 
             etNotes.setText(cursor.getString(cursor.getColumnIndexOrThrow("note")));
-
+            createdAt = cursor.getString(cursor.getColumnIndexOrThrow("created_at"));
             cursor.close();
         }
     }
@@ -192,6 +197,7 @@ public class EditVoucherActivity extends AppCompatActivity {
         String notes = etNotes.getText().toString().trim();
         Log.e("Type", type);
         Voucher voucher = new Voucher(name, email, type, date, time, adults, children, pickupLocation, dropoffLocation, notes);
+        voucher.setCreatedAt(createdAt);
         Cursor settingsCursor = dbHelper.getSettings();
         File pdf = PdfGenerator.generateVoucherPdf(this, voucher, settingsCursor);
         if (pdf != null) {
@@ -203,8 +209,8 @@ public class EditVoucherActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("application/pdf");
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{toEmail});
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Voucher Ενημέρωση");
-        intent.putExtra(Intent.EXTRA_TEXT, "Επισυνάπτουμε το ενημερωμένο voucher σας.");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Transfer Voucher");
+        intent.putExtra(Intent.EXTRA_TEXT, "Dear customer, we are attaching your transfer voucher..");
         intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this, getPackageName() + ".provider", pdfFile));
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(Intent.createChooser(intent, "Αποστολή με..."));

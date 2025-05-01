@@ -265,19 +265,19 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Κουμπιά -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="Αποθήκευση" />
+<!--        &lt;!&ndash; Κουμπιά &ndash;&gt;-->
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/btnSave"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="12dp"-->
+<!--            android:text="Αποθήκευση" />-->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSendPdf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Αποστολή PDF" />
+            android:text="Αποθήκευση και Αποστολή" />
     </LinearLayout>
 </ScrollView>

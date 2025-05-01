@@ -16,7 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,7 +61,11 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, locations);
 
         etPickup.setAdapter(adapter);
+        etPickup.setLongClickable(false);
+        etPickup.setTextIsSelectable(false);
         etDropoff.setAdapter(adapter);
+        etDropoff.setLongClickable(false);
+        etDropoff.setTextIsSelectable(false);
         etPickup.setOnClickListener(v -> etPickup.showDropDown());
         etDropoff.setOnClickListener(v -> etDropoff.showDropDown());
 
@@ -66,10 +73,10 @@ public class MainActivity extends AppCompatActivity {
         etPickup.setThreshold(1);
         etDropoff.setThreshold(1);
 
-        btnSave = findViewById(R.id.btnSave);
+        //btnSave = findViewById(R.id.btnSave);
         btnSendPdf = findViewById(R.id.btnSendPdf);
 
-        btnSave.setOnClickListener(v -> {saveVoucher(); clearForm();});
+        //btnSave.setOnClickListener(v -> {saveVoucher(); clearForm();});
         btnSendPdf.setOnClickListener(v -> {sendVoucherAsPdf();});
     }
 
@@ -157,6 +164,8 @@ public class MainActivity extends AppCompatActivity {
         String time = hour + ":" + (minute < 10 ? "0" + minute : minute);
 
         Voucher voucher = new Voucher(name, email, type, date, time, adults, children, pickupLocation, dropoffLocation, notes);
+        String createdAt = new SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.getDefault()).format(new Date());
+        voucher.setCreatedAt(createdAt);
         Cursor settingsCursor = dbHelper.getSettings();
         File pdf = PdfGenerator.generateVoucherPdf(this, voucher, settingsCursor);
 
@@ -172,8 +181,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("application/pdf");
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{toEmail});
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Το Voucher σας");
-        intent.putExtra(Intent.EXTRA_TEXT, "Αγαπητέ πελάτη, επισυνάπτουμε το voucher μεταφοράς σας.");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Transfer Voucher");
+        intent.putExtra(Intent.EXTRA_TEXT, "Dear customer, we are attaching your transfer voucher..");
         intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this, getPackageName() + ".provider", pdfFile));
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 

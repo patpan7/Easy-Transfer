@@ -34,6 +34,11 @@ import com.itextpdf.layout.properties.UnitValue;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Locale;
 
 public class PdfGenerator {
 
@@ -87,6 +92,14 @@ public class PdfGenerator {
                     .setFontSize(18)
                     .setMarginBottom(15);
             document.add(title);
+
+            String createdAt = convertDate(voucher.getCreatedAt());
+            Paragraph dateParagraph = new Paragraph("Date: " + createdAt)
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setFontSize(10)
+                    .setItalic()
+                    .setMarginBottom(10);
+            document.add(dateParagraph);
 
             // --- Εταιρικά Στοιχεία από Settings (αν υπάρχουν)
             if (settingsCursor != null && settingsCursor.moveToFirst()) {
@@ -158,7 +171,7 @@ public class PdfGenerator {
             // Δημιουργία της κεφαλίδας
             Cell headerCell = new Cell(1, 2)
                     .add(new Paragraph("Voucher Details").setFont(font).setFontSize(14).setTextAlignment(TextAlignment.CENTER))
-                    .setBackgroundColor(ColorConstants.CYAN)
+                    .setBackgroundColor(ColorConstants.WHITE)
                     .setPadding(10)
                     .setBorder(Border.NO_BORDER);
             table.addCell(headerCell);
@@ -204,4 +217,24 @@ public class PdfGenerator {
         }
         return null;
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static String convertDate(String input) {
+        String[] patterns = {
+                "yyyy/MM/dd HH:mm",
+                "yyyy-MM-dd HH:mm:ss",
+                "dd/MM/yyyy HH:mm",
+                "yyyy/MM/dd"
+        };
+        for (String pattern : patterns) {
+            try {
+                DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern(pattern);
+                DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+                LocalDateTime dateTime = LocalDateTime.parse(input, inputFormatter);
+                return outputFormatter.format(dateTime);
+            } catch (Exception ignored) { }
+        }
+        return input;
+    }
 }
+

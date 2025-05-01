@@ -5,6 +5,7 @@ public class Voucher {
     private String name, email, type, date, time;
     private int adults, children;
     private String pickupLocation, dropoffLocation, notes;
+    private String createdAt;
 
 
     public Voucher(int id, String name, String email, String date) {
@@ -114,5 +115,13 @@ public class Voucher {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }
